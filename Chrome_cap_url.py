@@ -2,6 +2,10 @@
 from selenium import webdriver
 import os
 import datetime
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 
 #os.environ["LANG"] = "en_US.UTF-8"
 # Create a new cromedriver
@@ -37,20 +41,26 @@ except OSError as e:
 
 
 rf = open("address.txt", 'r')
-wf = open(fol, 'w')
+#wf = open(fol, 'w')
 i = 1
+driver = webdriver.Chrome(DRIVER_DIR, chrome_options=options)
+
 while True:
     line = rf.readline()
+    print(line)
     if not line: break
-    wf.write(line)
-
-    driver = webdriver.Chrome(DRIVER_DIR, chrome_options=options)
-    driver.get(line)
-
+    
+    #wf.write(line)
+    try:
+        driver.implicitly_wait(3)
+        driver.get(line)
+        screenshot_name = strr + '\\'+ str(i)+".png"
+        driver.save_screenshot(screenshot_name)
+        print("end" + str(i))
+        i = i +1     
+    except Exception as e:
+        print("error")
+   
+driver.quit()
     # Saves a .png file with name my_screenshot_name to the directory that
     # you are running the program from.
-
-    screenshot_name = strr + '\\'+ str(i)+".png"
-    driver.save_screenshot(screenshot_name)
-    print("end")
-    driver.close()
